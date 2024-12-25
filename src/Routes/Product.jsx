@@ -2,12 +2,23 @@ import React, { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { all_Data, cataitemContext } from "../Store/Data";
 import { DataItem } from "../components/DataItem";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import CloseIcon from "@mui/icons-material/Close";
 import { CartSliceAction } from "../Store/CartSlice";
 
 export const Product = () => {
+  const [slide, setslide] = useState();
   const { cataitem } = useContext(cataitemContext);
   const productItem = useSelector((store) => store.productSelect);
   const { all_product } = useContext(all_Data);
+  const arr = [
+    productItem.image,
+    productItem.image,
+    productItem.image,
+    productItem.image,
+  ];
+  const [modalImage, setModalImage] = useState(null); // State for modal image
 
   if (!productItem) {
     return (
@@ -19,8 +30,6 @@ export const Product = () => {
     (product) => product.category === cataitem
   );
 
-  // cartitems state management
-
   const CartItem = useSelector((store) => store.CartItemSlice);
   const dispatch = useDispatch();
 
@@ -28,14 +37,54 @@ export const Product = () => {
     dispatch(CartSliceAction.addToCart(item));
   };
 
+  const handleImageClick = (image, index) => {
+    setModalImage(image); // Set the clicked image
+    setslide(index);
+  };
+
+  const closeModal = () => {
+    setModalImage(null); // Clear the modal image
+  };
+  const backimage = (slide) => {
+    let value = slide - 1;
+    setslide(value);
+    setModalImage(arr[value]);
+    console.log(value);
+  };
+  const forwardimage = (slide) => {
+    let value = slide + 1;
+    setslide(value);
+    setModalImage(arr[value]);
+    console.log(value);
+  };
   return (
     <div className="core-wrapper">
+      {modalImage && (
+        <div className="modal">
+          <div className="modal-content">
+            <img src={modalImage} alt="Zoomed" />
+            <CloseIcon className="close-icon" onClick={() => closeModal()} />
+            <div className="backward">
+              <ArrowBackIosIcon
+                className="backward-arrow"
+                onClick={() => backimage(slide)}
+              />
+            </div>
+            <div className="forward">
+              <ArrowForwardIosIcon
+                className="forward-arrow"
+                onClick={() => forwardimage(slide)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
       <div className="main-product-cart">
         <div className="breadcrum">
           <p>
             home <img src=".././Assets/breadcrum_arrow.png" alt="" />
             {cataitem}
-            <img src=".././Assets/breadcrum_arrow.png" alt="" /> product
+            <img src=".././Assets/breadcrum_arrow.png" alt="" />
             <img src=".././Assets/breadcrum_arrow.png" alt="" />
             {productItem.name}
           </p>
@@ -43,16 +92,19 @@ export const Product = () => {
         <div className="product-cart-selection">
           <div className="product-cart-left">
             <div className="left-imgage">
-              <img src={productItem.image} alt="" />
-              <img src={productItem.image} alt="" />
-              <img src={productItem.image} alt="" />
-              <img src={productItem.image} alt="" />
+              {arr.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt=""
+                  onClick={() => handleImageClick(image, index)}
+                />
+              ))}
             </div>
             <div className="right-image">
               <img src={productItem.image} alt="" />
             </div>
           </div>
-
           <div className="product-cart-right">
             <div className="title-name">
               <h1>{productItem.name}</h1>
@@ -60,9 +112,8 @@ export const Product = () => {
                 ${productItem.new_price} <span>${productItem.old_price}</span>
               </h2>
               <p>
-                A light wight comfortable product currently launced with exterme
-                quallity product. It is suitable to wear in summer as well as
-                the winter.
+                A lightweight, comfortable product launched with extreme quality
+                materials. Suitable for both summer and winter.
               </p>
             </div>
             <div className="select-size">
@@ -80,7 +131,7 @@ export const Product = () => {
             </div>
             <div className="bottom-details">
               <p>
-                Catagory:
+                Category:
                 <span>{productItem.category}, T-shirt, Popular Now</span>
               </p>
               <p>
@@ -94,7 +145,6 @@ export const Product = () => {
         <div className="messages">
           <p>Related Products:</p>
         </div>
-
         <div className="women-popular-wrapper">
           {relatedProducts.map((productitem) => (
             <DataItem key={productitem.id} itemdata={productitem} />
