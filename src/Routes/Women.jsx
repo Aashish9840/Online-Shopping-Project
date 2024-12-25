@@ -3,7 +3,7 @@ import { all_Data } from "../Store/Data";
 import { DataItem } from "../components/DataItem";
 import ".././index.css";
 
-export const Women = () => {
+export const Women = ({ customProp }) => {
   const { all_product } = useContext(all_Data);
   const women_product = all_product.filter((product) => {
     return product.category === "women";
@@ -16,7 +16,7 @@ export const Women = () => {
       </div>
       <div className="messages">
         <p>Showing 1-12 Out of 36</p>
-        <button>Sorted By</button>
+        <button onClick={() => console.log(customProp)}>Sorted By</button>
       </div>
       <div className="women-popular-wrapper">
         {women_product.map((productitem) => (

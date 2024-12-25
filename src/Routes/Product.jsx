@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { all_Data } from "../Store/Data";
+import { all_Data, cataitemContext } from "../Store/Data";
 import { DataItem } from "../components/DataItem";
 import { CartSliceAction } from "../Store/CartSlice";
 
 export const Product = () => {
+  const { cataitem } = useContext(cataitemContext);
   const productItem = useSelector((store) => store.productSelect);
   const { all_product } = useContext(all_Data);
 
@@ -14,17 +15,9 @@ export const Product = () => {
     );
   }
 
-  const women_product = all_product.filter((product) => {
-    return product.category === "women";
-  });
-
-  const kid_product = all_product.filter((product) => {
-    return product.category === "kid";
-  });
-
-  const men_product = all_product.filter((product) => {
-    return product.category === "men";
-  });
+  const relatedProducts = all_product.filter(
+    (product) => product.category === cataitem
+  );
 
   // cartitems state management
 
@@ -41,7 +34,7 @@ export const Product = () => {
         <div className="breadcrum">
           <p>
             home <img src=".././Assets/breadcrum_arrow.png" alt="" />
-            {productItem.category}
+            {cataitem}
             <img src=".././Assets/breadcrum_arrow.png" alt="" /> product
             <img src=".././Assets/breadcrum_arrow.png" alt="" />
             {productItem.name}
@@ -103,17 +96,9 @@ export const Product = () => {
         </div>
 
         <div className="women-popular-wrapper">
-          {productItem.category === "men"
-            ? men_product.map((productitem) => (
-                <DataItem key={productitem.id} itemdata={productitem} />
-              ))
-            : productItem.category === "women"
-            ? women_product.map((productitem) => (
-                <DataItem key={productitem.id} itemdata={productitem} />
-              ))
-            : kid_product.map((productitem) => (
-                <DataItem key={productitem.id} itemdata={productitem} />
-              ))}
+          {relatedProducts.map((productitem) => (
+            <DataItem key={productitem.id} itemdata={productitem} />
+          ))}
         </div>
       </div>
     </div>

@@ -31,7 +31,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/women",
-        element: <Women />,
+        element: <Women customProp="Women's Shop" />,
       },
       {
         path: "/kid",

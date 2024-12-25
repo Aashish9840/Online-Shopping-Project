@@ -27,7 +27,6 @@ export const Login = () => {
                 placeholder="Password"
               />
             </div>
-
             <button type="submit">Continue</button>
           </form>
         </div>

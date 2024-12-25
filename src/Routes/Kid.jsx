@@ -5,9 +5,9 @@ import ".././index.css";
 
 export const Kid = () => {
   const { all_product } = useContext(all_Data);
-  const women_product = all_product.filter((product) => {
-    return product.category === "kid";
-  });
+  const kid_product = all_product.filter(
+    (product) => product.category === "kid"
+  );
 
   return (
     <div className="men-core-container">
@@ -19,7 +19,7 @@ export const Kid = () => {
         <button>Sorted By</button>
       </div>
       <div className="women-popular-wrapper">
-        {women_product.map((productitem) => (
+        {kid_product.map((productitem) => (
           <DataItem key={productitem.id} itemdata={productitem} />
         ))}
       </div>
