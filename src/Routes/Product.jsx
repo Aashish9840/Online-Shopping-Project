@@ -47,12 +47,21 @@ export const Product = () => {
   };
   const backimage = (slide) => {
     let value = slide - 1;
+    if (value < 0) {
+      value = arr.length - 1;
+      setslide(value);
+      console.log(value);
+    }
     setslide(value);
     setModalImage(arr[value]);
     console.log(value);
   };
   const forwardimage = (slide) => {
     let value = slide + 1;
+    if (arr.length == value) {
+      value = 0;
+      setslide(value);
+    }
     setslide(value);
     setModalImage(arr[value]);
     console.log(value);
