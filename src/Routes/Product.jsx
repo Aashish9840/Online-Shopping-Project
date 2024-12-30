@@ -12,40 +12,6 @@ import p3_img from "/Assets/product_3.png";
 import p4_img from "/Assets/product_4.png";
 
 export const Product = () => {
-  const arr = [
-    {
-      id: 1,
-      name: "Striped Flutter Sleeve Overlap Collar Peplum Hem Blouse",
-      category: "women",
-      image: p1_img,
-      new_price: 50.0,
-      old_price: 80.5,
-    },
-    {
-      id: 2,
-      name: "Striped Flutter Sleeve Overlap Collar Peplum Hem Blouse",
-      category: "women",
-      image: p2_img,
-      new_price: 85.0,
-      old_price: 120.5,
-    },
-    {
-      id: 3,
-      name: "Striped Flutter Sleeve Overlap Collar Peplum Hem Blouse",
-      category: "women",
-      image: p3_img,
-      new_price: 60.0,
-      old_price: 100.5,
-    },
-    {
-      id: 4,
-      name: "Striped Flutter Sleeve Overlap Collar Peplum Hem Blouse",
-      category: "women",
-      image: p4_img,
-      new_price: 100.0,
-      old_price: 150.0,
-    },
-  ];
   const [slide, setslide] = useState();
   const { cataitem } = useContext(cataitemContext);
   const productItem = useSelector((store) => store.productSelect);
@@ -53,15 +19,23 @@ export const Product = () => {
 
   const [modalImage, setModalImage] = useState(null); // State for modal image
 
+  const relatedProducts = all_product.filter(
+    (product) => product.category === cataitem
+  );
+  const arr = relatedProducts.filter((arra) => {
+    if (arra.category == "women") {
+      return arra.id < 5;
+    } else if (arra.category == "men") {
+      return arra.id < 17;
+    } else {
+      return arra.id < 29;
+    }
+  });
   if (!productItem) {
     return (
       <div className="Null-product">Loading... Please select a product.</div>
     );
   }
-
-  const relatedProducts = all_product.filter(
-    (product) => product.category === cataitem
-  );
 
   const CartItem = useSelector((store) => store.CartItemSlice);
   const dispatch = useDispatch();
