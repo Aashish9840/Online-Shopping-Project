@@ -6,29 +6,35 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CloseIcon from "@mui/icons-material/Close";
 import { CartSliceAction } from "../Store/CartSlice";
+import p1_img from "/Assets/product_1.png";
+import p2_img from "/Assets/product_2.png";
+import p3_img from "/Assets/product_3.png";
+import p4_img from "/Assets/product_4.png";
 
 export const Product = () => {
   const [slide, setslide] = useState();
   const { cataitem } = useContext(cataitemContext);
   const productItem = useSelector((store) => store.productSelect);
   const { all_product } = useContext(all_Data);
-  const arr = [
-    productItem.image,
-    productItem.image,
-    productItem.image,
-    productItem.image,
-  ];
-  const [modalImage, setModalImage] = useState(null); // State for modal image
 
+  const [modalImage, setModalImage] = useState(null); // State for modal image
+  const relatedProducts = all_product.filter(
+    (product) => product.category === cataitem
+  );
+  const arr = relatedProducts.filter((arra) => {
+    if (arra.category == "women") {
+      return arra.id < 5;
+    } else if (arra.category == "men") {
+      return arra.id < 17;
+    } else {
+      return arra.id < 29;
+    }
+  });
   if (!productItem) {
     return (
       <div className="Null-product">Loading... Please select a product.</div>
     );
   }
-
-  const relatedProducts = all_product.filter(
-    (product) => product.category === cataitem
-  );
 
   const CartItem = useSelector((store) => store.CartItemSlice);
   const dispatch = useDispatch();
@@ -38,7 +44,7 @@ export const Product = () => {
   };
 
   const handleImageClick = (image, index) => {
-    setModalImage(image); // Set the clicked image
+    setModalImage(image.image); // Set the clicked image
     setslide(index);
   };
 
@@ -53,7 +59,7 @@ export const Product = () => {
       console.log(value);
     }
     setslide(value);
-    setModalImage(arr[value]);
+    setModalImage(arr[value].image);
     console.log(value);
   };
   const forwardimage = (slide) => {
@@ -63,7 +69,7 @@ export const Product = () => {
       setslide(value);
     }
     setslide(value);
-    setModalImage(arr[value]);
+    setModalImage(arr[value].image);
     console.log(value);
   };
   return (
@@ -94,6 +100,7 @@ export const Product = () => {
             home <img src=".././Assets/breadcrum_arrow.png" alt="" />
             {cataitem}
             <img src=".././Assets/breadcrum_arrow.png" alt="" />
+            Products
             <img src=".././Assets/breadcrum_arrow.png" alt="" />
             {productItem.name}
           </p>
@@ -104,7 +111,7 @@ export const Product = () => {
               {arr.map((image, index) => (
                 <img
                   key={index}
-                  src={image}
+                  src={image.image}
                   alt=""
                   onClick={() => handleImageClick(image, index)}
                 />
